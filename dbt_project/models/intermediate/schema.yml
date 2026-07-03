@@ -1,0 +1,36 @@
+version: 2
+
+models:
+  - name: int_orders_enriched
+    description: Orders enriched with customer and campaign attributes
+    columns:
+      - name: order_id
+        tests: [unique, not_null]
+
+  - name: int_order_items_enriched
+    description: Order items enriched with product, category, and revenue metrics
+    columns:
+      - name: order_item_id
+        tests: [unique, not_null]
+      - name: net_sales
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+
+  - name: int_customer_order_summary
+    description: Per-customer order aggregations
+    columns:
+      - name: customer_id
+        tests: [unique, not_null]
+
+  - name: int_product_sales_summary
+    description: Per-product sales and return metrics
+    columns:
+      - name: product_id
+        tests: [unique, not_null]
+
+  - name: int_campaign_attribution
+    description: Campaign attribution and ROI metrics
+    columns:
+      - name: campaign_id
+        tests: [unique, not_null]

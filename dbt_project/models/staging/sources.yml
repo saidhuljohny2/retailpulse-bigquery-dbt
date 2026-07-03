@@ -1,0 +1,119 @@
+version: 2
+
+sources:
+  - name: raw
+    description: Raw retail data loaded from GCS into BigQuery
+    database: "{{ env_var('GCP_PROJECT_ID') }}"
+    schema: "{{ var('dataset_prefix') }}_raw"
+    loader: GCS + Python ingestion pipeline
+    freshness:
+      warn_after: {count: 24, period: hour}
+      error_after: {count: 48, period: hour}
+    loaded_at_field: _ingested_at
+
+    tables:
+      - name: customers
+        description: Customer master data
+        columns:
+          - name: customer_id
+            description: Primary key for customers
+            tests:
+              - not_null
+              - unique
+          - name: email
+            tests:
+              - not_null
+          - name: customer_status
+            tests:
+              - accepted_values:
+                  values: ['active', 'inactive', 'suspended']
+
+      - name: categories
+        description: Product category reference data
+        columns:
+          - name: category_id
+            tests:
+              - not_null
+              - unique
+
+      - name: products
+        description: Product catalog
+        columns:
+          - name: product_id
+            tests:
+              - not_null
+              - unique
+          - name: category_id
+            tests:
+              - not_null
+              - relationships:
+                  to: source('raw', 'categories')
+                  field: category_id
+
+      - name: orders
+        description: Customer orders
+        columns:
+          - name: order_id
+            tests:
+              - not_null
+              - unique
+          - name: customer_id
+            tests:
+              - not_null
+              - relationships:
+                  to: source('raw', 'customers')
+                  field: customer_id
+          - name: order_status
+            tests:
+              - accepted_values:
+                  values: ['completed', 'cancelled', 'pending', 'shipped', 'returned']
+
+      - name: order_items
+        description: Line items for each order
+        columns:
+          - name: order_item_id
+            tests:
+              - not_null
+              - unique
+          - name: order_id
+            tests:
+              - not_null
+              - relationships:
+                  to: source('raw', 'orders')
+                  field: order_id
+
+      - name: payments
+        description: Payment transactions
+        columns:
+          - name: payment_id
+            tests:
+              - not_null
+              - unique
+          - name: payment_amount
+            tests:
+              - dbt_utils.expression_is_true:
+                  expression: ">= 0"
+
+      - name: returns
+        description: Product return records
+        columns:
+          - name: return_id
+            tests:
+              - not_null
+              - unique
+
+      - name: web_events
+        description: Website behavioral events
+        columns:
+          - name: event_id
+            tests:
+              - not_null
+              - unique
+
+      - name: marketing_campaigns
+        description: Marketing campaign metadata
+        columns:
+          - name: campaign_id
+            tests:
+              - not_null
+              - unique

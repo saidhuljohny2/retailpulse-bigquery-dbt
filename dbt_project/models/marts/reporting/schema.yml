@@ -1,0 +1,42 @@
+version: 2
+
+models:
+  - name: mart_daily_sales
+    description: Daily sales KPIs for Looker Studio dashboards
+    columns:
+      - name: sales_date
+        tests: [unique, not_null]
+      - name: net_sales
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+
+  - name: mart_customer_360
+    description: Customer 360 view with lifetime value and segmentation
+    columns:
+      - name: customer_id
+        tests: [unique, not_null]
+
+  - name: mart_product_performance
+    description: Product performance metrics and segments
+    columns:
+      - name: product_id
+        tests: [unique, not_null]
+
+  - name: mart_campaign_roi
+    description: Marketing campaign ROI analysis
+    columns:
+      - name: campaign_id
+        tests: [unique, not_null]
+
+  - name: mart_customer_retention
+    description: Cohort-based customer retention analysis
+    columns:
+      - name: cohort_month
+        tests: [not_null]
+
+  - name: mart_regional_sales
+    description: Regional sales breakdown by geography
+    columns:
+      - name: country
+        tests: [not_null]

@@ -1,0 +1,62 @@
+version: 2
+
+models:
+  - name: dim_customers
+    description: Customer dimension with segmentation and churn flags
+    columns:
+      - name: customer_key
+        tests: [unique, not_null]
+      - name: customer_id
+        tests: [unique, not_null]
+
+  - name: dim_products
+    description: Product dimension with category and margin data
+    columns:
+      - name: product_key
+        tests: [unique, not_null]
+      - name: product_id
+        tests: [unique, not_null]
+
+  - name: dim_categories
+    description: Category dimension
+    columns:
+      - name: category_key
+        tests: [unique, not_null]
+
+  - name: dim_date
+    description: Date dimension for time-based analysis
+    columns:
+      - name: date_key
+        tests: [unique, not_null]
+      - name: date_day
+        tests: [unique, not_null]
+
+  - name: fct_orders
+    description: Order fact table partitioned by order_date
+    columns:
+      - name: order_key
+        tests: [unique, not_null]
+      - name: order_id
+        tests: [unique, not_null]
+
+  - name: fct_order_items
+    description: Order item fact table with incremental merge
+    columns:
+      - name: order_item_key
+        tests: [unique, not_null]
+      - name: order_item_id
+        tests: [unique, not_null]
+
+  - name: fct_returns
+    description: Returns fact table
+    columns:
+      - name: return_key
+        tests: [unique, not_null]
+
+  - name: fct_web_events
+    description: Web events fact table with incremental merge
+    columns:
+      - name: event_key
+        tests: [unique, not_null]
+      - name: event_id
+        tests: [unique, not_null]

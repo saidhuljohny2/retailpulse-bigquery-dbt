@@ -1,0 +1,72 @@
+version: 2
+
+models:
+  - name: stg_customers
+    description: Staged customer records with deduplication and type casting
+    columns:
+      - name: customer_id
+        tests: [unique, not_null]
+      - name: email
+        tests: [not_null]
+      - name: customer_status
+        tests:
+          - accepted_values:
+              values: ['active', 'inactive', 'suspended']
+
+  - name: stg_products
+    description: Staged product catalog
+    columns:
+      - name: product_id
+        tests: [unique, not_null]
+      - name: category_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_categories')
+              field: category_id
+
+  - name: stg_orders
+    description: Staged order transactions
+    columns:
+      - name: order_id
+        tests: [unique, not_null]
+      - name: customer_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_customers')
+              field: customer_id
+
+  - name: stg_order_items
+    description: Staged order line items
+    columns:
+      - name: order_item_id
+        tests: [unique, not_null]
+
+  - name: stg_payments
+    description: Staged payment records
+    columns:
+      - name: payment_id
+        tests: [unique, not_null]
+      - name: payment_amount
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+
+  - name: stg_returns
+    description: Staged return records
+    columns:
+      - name: return_id
+        tests: [unique, not_null]
+
+  - name: stg_web_events
+    description: Staged web behavioral events
+    columns:
+      - name: event_id
+        tests: [unique, not_null]
+
+  - name: stg_marketing_campaigns
+    description: Staged marketing campaign metadata
+    columns:
+      - name: campaign_id
+        tests: [unique, not_null]

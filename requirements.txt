@@ -1,0 +1,26 @@
+# RetailPulse - Python dependencies
+# Python 3.11+
+
+# GCP
+google-cloud-bigquery>=3.14.0
+google-cloud-storage>=2.14.0
+google-auth>=2.27.0
+
+# Data generation
+Faker>=22.0.0
+pandas>=2.1.0
+
+# dbt
+dbt-core>=1.7.0
+dbt-bigquery>=1.7.0
+
+# Utilities
+python-dotenv>=1.0.0
+click>=8.1.0
+
+# Linting (CI)
+sqlfluff>=3.0.0
+sqlfluff-templater-dbt>=3.0.0
+
+# Airflow (local dev / Composer compatible)
+apache-airflow>=2.7.0

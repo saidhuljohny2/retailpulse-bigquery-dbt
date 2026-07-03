@@ -1,0 +1,51 @@
+name: 'retailpulse'
+version: '1.0.0'
+config-version: 2
+
+profile: 'retailpulse'
+
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+target-path: "target"
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+vars:
+  dataset_prefix: "{{ env_var('DBT_DATASET_PREFIX', 'retailpulse') }}"
+  incremental_lookback_days: 7
+
+models:
+  retailpulse:
+    staging:
+      +materialized: view
+      +schema: staging
+      +tags: ['staging']
+    intermediate:
+      +materialized: view
+      +schema: intermediate
+      +tags: ['intermediate']
+    marts:
+      core:
+        +materialized: table
+        +schema: analytics
+        +tags: ['core', 'marts']
+      reporting:
+        +materialized: table
+        +schema: reporting
+        +tags: ['reporting', 'marts']
+
+snapshots:
+  retailpulse:
+    +target_schema: snapshots
+    +tags: ['snapshots']
+
+tests:
+  retailpulse:
+    +store_failures: true
+    +schema: staging

@@ -1,0 +1,23 @@
+[sqlfluff]
+dialect = bigquery
+templater = dbt
+max_line_length = 120
+exclude_rules = L003,L016
+
+[sqlfluff:templater:dbt]
+project_dir = .
+profiles_dir = .
+profile = retailpulse
+target = dev
+
+[sqlfluff:indentation]
+tab_space_size = 4
+
+[sqlfluff:rules:capitalisation.keywords]
+capitalisation_policy = lower
+
+[sqlfluff:rules:capitalisation.identifiers]
+capitalisation_policy = lower
+
+[sqlfluff:rules:capitalisation.functions]
+capitalisation_policy = lower
