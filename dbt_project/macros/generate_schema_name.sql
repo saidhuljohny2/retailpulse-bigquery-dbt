@@ -2,7 +2,7 @@
     {%- set default_schema = target.schema -%}
     {%- if custom_schema_name is none -%}
         {{ default_schema }}
-    {%- else -%}
-        {{ var('dataset_prefix') }}_{{ custom_schema_name | trim }}
+{%- else -%}
+        {{ env_var('DBT_DATASET_PREFIX', var('dataset_prefix')) }}_{{ custom_schema_name | trim }}
     {%- endif -%}
 {%- endmacro %}

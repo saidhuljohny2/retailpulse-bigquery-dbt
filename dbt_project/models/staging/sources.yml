@@ -4,12 +4,13 @@ sources:
   - name: raw
     description: Raw retail data loaded from GCS into BigQuery
     database: "{{ env_var('GCP_PROJECT_ID') }}"
-    schema: "{{ var('dataset_prefix') }}_raw"
+    schema: "{{ env_var('DBT_DATASET_PREFIX', var('dataset_prefix')) }}_raw"
     loader: GCS + Python ingestion pipeline
-    freshness:
-      warn_after: {count: 24, period: hour}
-      error_after: {count: 48, period: hour}
-    loaded_at_field: _ingested_at
+    config:
+      freshness:
+        warn_after: {count: 24, period: hour}
+        error_after: {count: 48, period: hour}
+      loaded_at_field: _ingested_at
 
     tables:
       - name: customers
@@ -92,7 +93,8 @@ sources:
           - name: payment_amount
             tests:
               - dbt_utils.expression_is_true:
-                  expression: ">= 0"
+                  arguments:
+                    expression: ">= 0"
 
       - name: returns
         description: Product return records

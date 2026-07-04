@@ -51,7 +51,8 @@ models:
       - name: payment_amount
         tests:
           - dbt_utils.expression_is_true:
-              expression: ">= 0"
+              arguments:
+                expression: ">= 0"
 
   - name: stg_returns
     description: Staged return records

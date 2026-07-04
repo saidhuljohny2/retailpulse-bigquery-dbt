@@ -9,7 +9,8 @@ models:
       - name: net_sales
         tests:
           - dbt_utils.expression_is_true:
-              expression: ">= 0"
+              arguments:
+                expression: ">= 0"
 
   - name: mart_customer_360
     description: Customer 360 view with lifetime value and segmentation

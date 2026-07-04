@@ -15,7 +15,8 @@ models:
       - name: net_sales
         tests:
           - dbt_utils.expression_is_true:
-              expression: ">= 0"
+              arguments:
+                expression: ">= 0"
 
   - name: int_customer_order_summary
     description: Per-customer order aggregations

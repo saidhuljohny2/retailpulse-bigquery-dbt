@@ -307,6 +307,17 @@ def save_dataframes(dataframes: dict[str, pd.DataFrame], output_dir: Path) -> No
         logger.info("Wrote %s records to %s", len(df), path)
 
 
+def normalize_nullable_ids(dataframes: dict[str, pd.DataFrame]) -> None:
+    """Keep nullable integer IDs from being serialized as floats in CSV output."""
+    nullable_id_columns = {
+        "orders": ["campaign_id"],
+        "web_events": ["customer_id", "product_id", "campaign_id"],
+    }
+    for table_name, columns in nullable_id_columns.items():
+        for column in columns:
+            dataframes[table_name][column] = dataframes[table_name][column].astype("Int64")
+
+
 def main() -> None:
     """Generate all synthetic retail data files."""
     args = parse_args()
@@ -352,6 +363,7 @@ def main() -> None:
         "marketing_campaigns": campaigns,
     }
 
+    normalize_nullable_ids(dataframes)
     save_dataframes(dataframes, output_dir)
     logger.info("Data generation complete.")
 

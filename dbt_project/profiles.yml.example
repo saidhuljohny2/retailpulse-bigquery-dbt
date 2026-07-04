@@ -8,7 +8,6 @@ retailpulse:
       dataset: "{{ env_var('DBT_DATASET_PREFIX', 'retailpulse') }}_staging"
       location: "{{ env_var('GCP_REGION', 'us-central1') }}"
       threads: 4
-      timeout_seconds: 300
       priority: interactive
       keyfile: "{{ env_var('GOOGLE_APPLICATION_CREDENTIALS') }}"
       job_execution_timeout_seconds: 300
@@ -21,7 +20,6 @@ retailpulse:
       dataset: "{{ env_var('DBT_DATASET_PREFIX', 'retailpulse') }}_staging"
       location: "{{ env_var('GCP_REGION', 'us-central1') }}"
       threads: 4
-      timeout_seconds: 300
       priority: interactive
       keyfile: "{{ env_var('GOOGLE_APPLICATION_CREDENTIALS') }}"
       job_execution_timeout_seconds: 300
@@ -34,7 +32,6 @@ retailpulse:
       dataset: "{{ env_var('DBT_DATASET_PREFIX', 'retailpulse') }}_staging"
       location: "{{ env_var('GCP_REGION', 'us-central1') }}"
       threads: 8
-      timeout_seconds: 600
       priority: interactive
       keyfile: "{{ env_var('GOOGLE_APPLICATION_CREDENTIALS') }}"
       job_execution_timeout_seconds: 600

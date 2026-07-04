@@ -17,7 +17,7 @@ clean-targets:
   - "dbt_packages"
 
 vars:
-  dataset_prefix: "{{ env_var('DBT_DATASET_PREFIX', 'retailpulse') }}"
+  dataset_prefix: retailpulse
   incremental_lookback_days: 7
 
 models:
